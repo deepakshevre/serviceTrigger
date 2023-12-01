@@ -1,0 +1,11 @@
+[Unit]
+Description=Service trigger
+After=syslog.target
+
+[Service]
+WorkingDirectory=/opt
+User=root
+ExecStart=/usr/bin/java -jar serviceTrigger-0.0.1-SNAPSHOT.jar
+
+[Install]
+WantedBy=multi-user.target
