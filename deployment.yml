@@ -23,7 +23,7 @@
 
     - name: Creating Node Service
       ansible.builtin.template:
-        src: /templates/serviceTrigger.service
+        src: serviceTrigger.service
         dest: /etc/systemd/system/serviceTrigger.service
       become: yes
 
