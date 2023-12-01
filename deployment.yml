@@ -1,0 +1,41 @@
+---
+- name: Deploy serviceTrigger to AWS remote host
+  hosts: aws_remote_host
+  become: yes
+  become_user: wesuser
+  vars:
+    role_name: serviceTrigger  
+
+  tasks:
+    - name: create opt directory for service trigger
+      file:
+        path: /opt/serviceTrigger
+        state: directory
+
+    - name: Copy serviceTrigger files to remote host
+      ansible.builtin.copy:
+        src: /home/deepak/Desktop/serviceTrigger/
+        dest: /opt/serviceTrigger/
+        owner: wesuser
+        group: wesuser
+        mode: "0755"
+      delegate_to: 3.6.96.247
+
+    - name: Creating Node Service
+      ansible.builtin.template:
+        src: /templates/serviceTrigger.service
+        dest: /etc/systemd/system/serviceTrigger.service
+      become: yes
+
+    - name: Reloading Daemon
+      ansible.builtin.command:
+        cmd: systemctl daemon-reload
+      become: yes
+
+    - name: Start Service Trigger Service
+      ansible.builtin.service:
+        name: serviceTrigger
+        state: started
+        enabled: yes
+      become: yes
+
